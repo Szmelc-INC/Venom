@@ -14,7 +14,7 @@ Venom is a lightweight shell script that creates and manages a **single global P
 - **Automatic bootstrap:** Creates the directory and initializes the venv during the first run.
 - **Proper permissions:** Recursively sets ownership so `pip` works without `sudo`.
 - **Custom prompt:** Starts a new Bash session with a styled Venom prompt.
-- **Single command:** After installation, run it using the `venv` command.
+- **Single command:** After installation, run it using the `venom` command.
 
 ---
 
@@ -23,7 +23,7 @@ Venom is a lightweight shell script that creates and manages a **single global P
 ```bash
 git clone https://github.com/Szmelc-INC/Venom.git
 cd Venom
-sudo install -m 755 venv.sh /usr/local/bin/venv
+sudo install -m 755 venv.sh /bin/venom
 ```
 
 ---
@@ -33,7 +33,7 @@ sudo install -m 755 venv.sh /usr/local/bin/venv
 Start or enter the Venom environment:
 
 ```bash
-venv
+venom
 ```
 
 On the first invocation, Venom will:
@@ -83,45 +83,4 @@ The script performs the following steps:
    This session:
    - Sources the venv `activate` script  
    - Applies Venom’s custom PS1 prompt
-
----
-
-## Script Reference
-
-This is the exact script used by Venom:
-
-```bash
-#!/bin/bash
-# [Venom] - [v1] 
-# Venv Helper by Szmelc.INC 
-
-venv_dir="/usr/local/venv"
-default_env="$venv_dir/default"
-
-# Setup stage
-if [ ! -d "$default_env" ]; then
-    echo "[+] Setting up venv environment (sudo required)"
-    sudo mkdir -p "$venv_dir"
-    sudo python -m venv "$default_env"
-fi
-
-# Fix ownership
-sudo chown -R "$USER:$USER" "$venv_dir"
-
-# Confirm valid venv
-if [ ! -f "$default_env/bin/activate" ]; then
-    echo "[-] Missing activate script. Venv may be broken."
-    exit 1
-fi
-
-# Activate with sexy garbage prompt
-echo "[+] Activating default venv..."
-exec bash --rcfile <(cat <<EOF
-export VIRTUAL_ENV_DISABLE_PROMPT=1
-source "$default_env/bin/activate"
-# Custom PS1 with cursed colors
-PS1="[\[\e[1;91m\]V\[\e[0m\]] [\[\e[1;93m\]default\[\e[0m\]] \[\e[1;96m\]\u@\h\[\e[0m\] \[\e[1;95m\]\w\[\e[0m\] \$ "
-EOF
-)
-```
 
