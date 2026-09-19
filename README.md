@@ -1,4 +1,4 @@
-# Venom  
+# Venom v2.1
 ## Python Virtual Environment Manager  
 ### A global venv for your entire system
 
